@@ -11,19 +11,17 @@ public boolean monkeyTrouble(boolean aSmile, boolean bSmile)
 
 
 // Given two int values, return their sum. Unless the two values are the same, then return double their sum.
-public int sumDouble(int a, int b)
-{	return (a == b) ? a+a+b+b : a+b;	}
-
+public int sumDouble(int a, int b) {
+  return (a == b ? 2 * (a + b) : a + b);
+}
 
 // /* Given an int n, return the absolute difference between n and 21,
 // except return double the absolute difference if n is over 21.
-public int diff21(int n)
-{
-	if(n > 21)
-		return 2 * (n - 21); // or 2*n - 42
-	else
-		return 21 - n;
+public int diff21(int n) {
+  int  difference = 21 - n;
+  return (difference >= 0 ? difference : -2 * difference);
 }
+
 
 
 // We have a loud talking parrot.
@@ -36,35 +34,41 @@ public boolean parrotTrouble(boolean talking, int hour)
 
 // Given 2 ints, a and b
 // return true if one if them is 10 or if their sum is 10.
-public boolean makes10(int a, int b)
-{	return (a == 10 || b == 10 || a+b == 10); }
+public boolean makes10(int a, int b) {
+  return (a == 10 || b == 10 || a + b == 10);
+}
 
 
 // Given an int n, return true if it is within 10 of 100 or 200.
 // Note: Math.abs(num) computes the absolute value of a number. 
-public boolean nearHundred(int n)
-{	return (Math.abs(100-n) <= 10 || Math.abs(200-n) <= 10); }
+public boolean nearHundred(int n) {
+  return ( isWithin10(n, 100) || isWithin10(n, 200) );
+}
+
+private boolean isWithin10(int n, int bound){
+  return (Math.abs(n - bound) <= 10);
+}
 
 
 // Given 2 int values, return true if one is negative and one is positive.
 // Unless the parameter "negative" is true, then they both must be negative.
-public boolean posNeg(int a, int b, boolean negative)
-{
-	if(negative)
-		return (a < 0 && b < 0);
-	return (a < 0 && b > 0 || a > 0 && b < 0);
+public boolean posNeg(int a, int b, boolean negative) {
+  return ( negative ? (!isPositive(a) && !isPositive(b)) : (isPositive(a) && !isPositive(b)) || (isPositive(b) && !isPositive(a)) ); 
+}
+
+private boolean isPositive(int n){
+  return (n > 0);
 }
 
 
 // Given a string, return a new string where "not " has been added to the front.
 // However, if the string already begins with "not", return the string unchanged.
 // Note: use .equals() to compare 2 strings. 
-public String notString(String str)
-{
-	if(str.startsWith("not"))
-		return str;
-	else
-		return ("not " + str);
+public String notString(String str) {
+  if (str.length() >= 3 && str.substring(0,3).equals("not")){
+    return (str);
+  }
+  return ("not " + str);
 }
 
 
@@ -76,31 +80,41 @@ public String missingChar(String str, int n)
 
 
 // Given a string, return a new string where the first and last chars have been exchanged
-public String frontBack(String str)
-{
-	int len = str.length();
-	if(len >= 2)
-	{
-		len--;
-		return (str.charAt(len) + str.substring(1, len) + str.charAt(0));
-	}
-	else
-		return str;
+public String frontBack(String str) {
+  if (str.length() == 0)
+    return str;
+    
+  char[] string = str.toCharArray();
+  
+  char first = string[0];
+  char last = string [str.length() - 1];
+  
+  string[0] = last;
+  string[str.length() - 1] = first;
+  
+  return new String(string);
 }
+
 
 
 // Given a string, we'll say that the front is the first 3 chars of the string.
 // If the string length is less than 3, the front is whatever is there.
 // Return a new string which is 3 copies of the front. 
-public String front3(String str)
-{
-	String front;
-	if(str.length() >= 3)
-		front = str.substring(0, 3);
-	else
-		front = str;
-	return (front + front + front);
+public String front3(String str) {
+  String front, returnStr = new String();
+
+  if (str.length() < 3)
+    front = str;
+  else
+    front = str.substring(0, 3);
+  
+  for (int i = 0; i < 3; i++)
+    returnStr += front;  
+  
+  return returnStr;
 }
+
+
 // Given a string, take the last char and return a new string with the last char added at the front and back,
 // so "cat" yields "tcatt". The original string will be length 1 or more. 
 public String backAround(String str)
@@ -109,84 +123,101 @@ public String backAround(String str)
 	return (str.charAt(len) + str + str.charAt(len));
 }
 
+// Return true if the given non-negative number is a multiple of 3 or a multiple of 5. 
+public boolean or35(int n) {
+  return n % 3 ==0 || n % 5 ==0;
+}
 
 // Given a string, take the first 2 chars and return the string with the 2 chars added at both the front and back,
 // so "kitten" yields"kikittenki". If the string length is less than 2, use whatever chars are there. 
-public String front22(String str)
-{
-	String temp;
-	int len = str.length();
-	if(len > 2)
-	    len = 2;
-	temp = str.substring(0, len);
-	return (temp + str + temp);
+public String front22(String str) {
+  String front = str.substring(0, str.length() < 2 ? str.length() : 2);
+  return front + str + front;
+}
+
+// Given a string, return true if the string starts with "hi" and false otherwise.
+public boolean startHi(String str) {
+  return str.length() > 2 ? str.substring(0, 2).equals("hi") : str.equals("hi");
 }
 
 
-// Given a string, return true if the string starts with "hi" and false otherwise.
-public boolean startHi(String str)
-{	return str.startsWith("hi");	}
-
-
 // Given two temperatures, return true if one is less than 0 and the other is greater than 100. 
-public boolean icyHot(int temp1, int temp2)
-{	return ((temp1 < 0 && temp2 > 100) || (temp1 > 0 && temp2 < 100));	}
+public boolean icyHot(int temp1, int temp2) {
+  int[] array = {temp1, temp2};
+  
+  boolean lessThanZero = false, greaterThanHundred = false;
+  
+  for (int i = 0; i < array.length; i ++){
+    lessThanZero = lessThanZero ? true : array[i] < 0;
+    greaterThanHundred = greaterThanHundred ? true : array[i] > 100;
+  }
+  
+  return lessThanZero && greaterThanHundred;
+}
 
 
 // Given 2 int values, return true if either of them is in the range 10..20 inclusive. 
-public boolean in1020(int a, int b)
-{	return ((a >= 10 && a <= 20) || (b >= 10 && b <= 20));	}
+public boolean in1020(int a, int b) {
+  int[] array = {a, b};
+  
+  for (int i = 0; i < array.length; i ++){
+    if (array[i] <= 20 && array[i] >= 10)
+      return true;
+  }
+  
+  return false;
+}
 
 
 // Given 2 int values, return true if either of them is in the range 10..20 inclusive. 
-public boolean hasTeen(int a, int b, int c)
-{	return ((a >= 13 && a <= 19) || (b >= 13 && b <= 19) || (c >= 13 && c <= 19));	}
+public boolean hasTeen(int a, int b, int c) {
+  int[] array = {a, b, c};
+  
+  for (int i = 0; i < array.length; i++){
+    if (array[i] >= 13 && array[i] <= 19)
+      return true;
+  } return false;
+}
 
 
 // We'll say that a number is "teen" if it is in the range 13..19 inclusive.
 // Given 2 int values, return true if one or the other is teen, but not both. 
-public boolean loneTeen(int a, int b)
-{
-	return (((a >= 13 && a <= 19) && !(b >= 13 && b <= 19)) ||
-		(!(a >= 13 && a <= 19) && (b >= 13 && b <= 19)));
+public boolean loneTeen(int a, int b) {
+  return isTeen(a) ^ isTeen(b); // ^ is the exclusive-or, XOR, gate
 }
+
+private boolean isTeen(int i){
+  return i <= 19 && i >= 13;
+}
+
 
 
 // Given a string, if the string "del" appears starting at index 1,
 // return a string where that "del" has been deleted. Otherwise, return the string unchanged. 
-public String delDel(String str)
-{
-	if(str.indexOf("del") == 1)
-		return (str.charAt(0) + str.substring(4, str.length()));
-	else
-		return str;
+public String delDel(String str) {
+  return str.length() > 3  ? ((str.substring(1, 4).equals("del")) ? (str.substring(0, 1) + str.substring(4)) : (str)) : str;
 }
 
 
+
 // Return true if the given string begins with "mix", except the 'm' can be anything, so "pix", "9ix" .. all count. 
-public boolean mixStart(String str)
-{	return (str.indexOf("ix") == 1);	}
+public boolean mixStart(String str) {
+  return str.length() < 3 ? false : str.substring(1,3).equals("ix");
+}
 
 
 // Given a string, return a string made of the first 2 chars (if present),
 // however include first char only if it is 'o' and include the second only if it is 'z',
 // so "ozymandias" yields "oz". 
-public String startOz(String str)
-{
-	int len = str.length();
-	String temp = "";
-	if(len >= 1)
-	{
-		if(str.charAt(0) == 'o')
-			temp += str.charAt(0);
-		if(len >= 2)
-		{
-			if(str.charAt(1) == 'z')
-				temp += str.charAt(1);
-		}		
-	}
-	return temp;
+public String startOz(String str) {
+  String ret = new String();
+  if (str.length() >= 1 && str.substring(0, 1).equals("o"))
+    ret += "o";
+  if (str.length() >= 2 && str.substring(1, 2).equals("z"))
+    ret += "z";
+  return ret;
 }
+
 
 
 // Given three int values, A B C, return the largest. 
@@ -203,60 +234,52 @@ public int intMax(int a, int b, int c)
 
 // Given 2 int values, return whichever value is nearest to the value 10, or return 0 in the event of a tie.
 // Note that Math.abs(n) returns the absolute value of a number.
-public int close10(int a, int b)
-{
-	int ma = Math.abs(10-a);
-	int mb = Math.abs(10-b);
-	if (ma < mb)
-		return a;
-	if (mb < ma)
-		return b;
-	return 0;
+public int close10(int a, int b) {
+  return distanceFrom10(a) == distanceFrom10(b) ? 0 : (distanceFrom10(a) < distanceFrom10(b) ? a : b);
+}
+
+private int distanceFrom10(int n){
+  return Math.abs(10 - n);
 }
 
 
 // Given 2 int values, return true if they are both in the range 30..40 inclusive,
 // or they are both in the range 40..50 inclusive.
-public boolean in3050(int a, int b)
-{
-	return  (((a >= 30 && a <= 40) && (b >= 30 && b <= 40)) ||
-	((a >= 40 && a <= 50) && (b >= 40 && b <= 50)));
+public boolean in3050(int a, int b) {
+  return (in3040(a) && in3040(b)) || (in4050(a) && in4050(b));
+}
+
+private boolean in3040(int n) {
+  return n >= 30 && n <= 40;
+}
+
+private boolean in4050(int n) {
+  return n >= 40 && n <= 50;
 }
 
 
 // Given 2 positive int values, return the larger value that is in the range 10..20 inclusive,
 // or return 0 if neither is in that range.
-public int max1020(int a, int b) 
-{
-	if(a >= 10 && a <= 20)
-	{
-		if(b >= 10 && b <= 20 && b >= a)
-			return b;
-		else
-			return a;
-	}
-	else if(b >= 10 && b <= 20)
-	{
-		return b;
-	}
-	else
-	{
-		return 0;
-	}
+public int max1020(int a, int b) {
+  return in1020(Math.max(a, b)) ? Math.max(a, b) : (in1020(Math.min(a, b)) ? Math.min(a, b) : 0);
+}
+
+private boolean in1020(int n) {
+  return n >= 10 && n <= 20;
 }
 
 
 // Return true if the given string contains between 1 and 3 'e' chars. 
-public boolean stringE(String str)
-{
-	int count = 0;
-	for(int i = 0; i < str.length(); i++)
-	{
-		if(str.charAt(i) == 'e')
-			count++;
-	}
-	return (count >= 1 && count <= 3);
+public boolean stringE(String str) {
+  int count = 0;
+  
+  for (int i = 0; i < str.length(); i++) {
+    if (str.charAt(i) == 'e')
+      count++;
+  }
+  return count <= 3 && count >= 1;
 }
+
 
 
 // Given two non-negative int values, return true if they have the same last digit,
@@ -268,23 +291,24 @@ public boolean lastDigit(int a, int b)
 // Given a string, return a new string where the last 3 chars are now in upper case.
 // If the string has less than 3 chars, uppercase whatever is there.
 // Note that str.toUpperCase() returns the uppercase version of a string.
-public String endUp(String str)
-{
-	int len = str.length() - 3;
-	if(len >= 0)
-		return (str.substring(0, len) + (str.substring(len)).toUpperCase());
-	else
-		return str.toUpperCase();
+public String endUp(String str) {
+  int index = str.length() > 3 ? str.length() - 3 : 0;
+  
+  return str.substring(0, index) + str.substring(index).toUpperCase();
 }
+
 
 
 // Given a non-empty string and an int N, return the string made starting with char 0,
 // and then every Nth char of the string. So if N is 3, use char 0, 3, 6, ... and so on.
 // N is 1 or more
-public String everyNth(String str, int n)
-{
-	StringBuilder stbuild = new StringBuilder();
-	for(int i = 0; i < str.length(); i += n)
-		stbuild.append(str.charAt(i));
-	return stbuild.toString();
+public String everyNth(String str, int n) {
+  String reply = new String();
+  
+  for (int counter = 0; counter < str.length(); counter += n){
+    reply += str.charAt(counter);
+  }
+  
+  return reply;
 }
+
