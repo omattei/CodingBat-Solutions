@@ -1,138 +1,75 @@
 // Given a string, return a string where for every char in the original, there are two chars.
-public String doubleChar(String str)
-{
-	int len = str.length();
-	char ch;
-	StringBuilder stbuild = new StringBuilder(len*2);
-	for(int i = 0; i < len; i++)
-	{
-		ch = str.charAt(i);
-		stbuild.append(ch);
-		stbuild.append(ch);
-	}
-	return stbuild.toString();
+public String doubleChar(String str) {
+  String reply = new String();
+
+  for (char e : str.toCharArray())
+    reply += "" + e + e;
+
+  return reply;
 }
 
 // Return the number of times that the string "hi" appears anywhere in the given string.
-public int countHi(String str)
-{
-	int len = str.length()-1;
-	int times = 0;
-	for(int i = 0; i < len; i++)
-	{
-		if(str.charAt(i) == 'h' && str.charAt(i+1) == 'i')
-			times++;
-	}
-	return times;
+public int countHi(String str) {
+  return (str.length() - str.replace("hi","").length()) / 2;
 }
 
 // Return true if the string "cat" and "dog" appear the same number of times in the given string.
-public boolean catDog(String str)
-{
+public boolean catDog(String str) {
 
-	int len = str.length()-2;
-	int diff = 0;
-	for(int i = 0; i < len; i++)
-	{
-		if(str.charAt(i) == 'c')
-		{
-			if(str.charAt(i+1) == 'a' && str.charAt(i+2) == 't')
-				diff++;
-		}
-		else if(str.charAt(i) == 'd')
-		{
-			if(str.charAt(i+1) == 'o' && str.charAt(i+2) == 'g')
-				diff--;
-		}
-	}
-	return (diff == 0);
+  String cat = str;
+  int catCount = (str.length() - cat.replace("cat", "").length()) / 3;
+
+  String dog = str;
+  int dogCount = (str.length() - dog.replace("dog", "").length()) / 3;
+
+  return catCount == dogCount;
 }
 
 // Return the number of times that the string "code" appears anywhere in the given string, except we'll accept any letter for the 'd', so "cope" and "cooe" count.
-public int countCode(String str)
-{
-	int times = 0;
-	int i = 0;
-	int len = str.length()-3;
-	while(i <  len)
-	{
-		if(str.charAt(i) == 'c' && str.charAt(i+1) == 'o' && str.charAt(i+3) == 'e')
-		{
-			times++;
-			i += 4;
-		}
-		else
-			i++;
-	}
-	return times;
+public int countCode(String str) {
+  int count = 0;
+
+  for (int i = 0; i < str.length() - 3; i++){
+    if (("" + str.charAt(i) + str.charAt(i + 1) + str.charAt(i + 3)).equals("coe"))
+      count++;
+  } return count;
 }
 
-// Given two strings, return true if either of the strings appears at the very end of the other string, ignoring upper/lower case differences (in other words, the computation should not be "case sensitive"). Note: str.toLowerCase() returns the lowercase version of a string. 
-public boolean endOther(String a, String b)
-{
-	int aLen = a.length();
-	int bLen = b.length();
-	String end;
-	String temp;
-	a = a.toLowerCase();
-	b = b.toLowerCase();
-	if(aLen >= bLen)
-	{
-		end = a.substring(aLen - bLen);
-		temp = b;
-	}
-	else
-	{
-		end = b.substring(bLen - aLen);
-		temp = a;
-	}
-	return (end.equals(temp));
+// Given two strings, return true if either of the strings appears at the very end of the other string, ignoring upper/lower case differences (in other words, the computation should not be "case sensitive"). Note: str.toLowerCase() returns the lowercase version of a string.
+public boolean endOther(String a, String b) {
+  a = a.toLowerCase();
+  b = b.toLowerCase();
+
+  return a.endsWith(b) || b.endsWith(a);
 }
 
 // Return true if the given string contains an appearance of "xyz" where the xyz is not directly preceeded by a period (.). So "xxyz" counts but "x.xyz" does not.
-public boolean xyzThere(String str)
-{
-	int len = str.length() - 2;
-	for(int i = 0; i < len; i++)
-	{
-		if(str.charAt(i) == 'x' && str.charAt(i+1) == 'y' && str.charAt(i+2) == 'z')
-		{
-			if(i == 0 || str.charAt(i-1) != '.')
-				return true;
-		}
-	}
-	return false;
+public boolean xyzThere(String str) {
+  if (str.length() >= 3) {
+    if (str.substring(0,3).equals("xyz")) return true;
+    for (int i = 0; i < str.length()-3; i++)
+      if (str.substring(i+1, i+4).equals("xyz") && str.charAt(i) != '.')
+        return true;
+  }
+  return false;
 }
 
-// Return true if the given string contains a "bob" string, but where the middle 'o' char can be any char. 
-public boolean bobThere(String str)
-{
-	int len = str.length() - 2;
-	for(int i = 0; i < len; i++)
-	{
-		if(str.charAt(i) == 'b' && str.charAt(i+2) == 'b')
-			return true;
-	}
-	return false;
+// Return true if the given string contains a "bob" string, but where the middle 'o' char can be any char.
+public boolean bobThere(String str) {
+  if (str.length() < 3) return false;
+    for (int i = 0; i < str.length() - 2; i++){
+      if (str.charAt(i) == str.charAt(i + 2) && str.charAt(i) == 'b') {
+        return true;
+      }
+   } return false;
 }
 
 // We'll say that a String is xy-balanced if for all the 'x' chars in the string, there exists a 'y' char somewhere later in the string. So "xxy" is balanced, but "xyx" is not. One 'y' can balance multiple 'x's. Return true if the given string is xy-balanced.
-public boolean xyBalance(String str)
-{
-	int len = str.length() - 1;
-	char ch;
-	for(int i = len; i >= 0; i--)
-	{
-		ch = str.charAt(i);
-		if(ch == 'x')
-			return false;
-		else if(ch == 'y')
-			return true;
-	}
-	return true;  
+public boolean xyBalance(String str) {
+     return str.lastIndexOf("x") <= str.lastIndexOf("y"); // account for -1 <= -1
 }
 
-// Given two strings, A and B, create a bigger string made of the first char of A, the first char of B, the second char of A, the second char of B, and so on. Any leftover chars go at the end of the result. 
+// Given two strings, A and B, create a bigger string made of the first char of A, the first char of B, the second char of A, the second char of B, and so on. Any leftover chars go at the end of the result.
 public String mixString(String a, String b)
 {
 	int aLen = a.length();
@@ -174,7 +111,7 @@ public String repeatFront(String str, int n)
 	return stbuild.toString();
 }
 
-//Given two strings, word and a separator, return a big string made of count occurences of the word, separated by the separator string. 
+//Given two strings, word and a separator, return a big string made of count occurences of the word, separated by the separator string.
 public String repeatSeparator(String word, String sep, int count)
 {
 	if(count == 0)
@@ -183,7 +120,7 @@ public String repeatSeparator(String word, String sep, int count)
 	for(int i = 1; i < count; i++)
 	{
 		stbuild.append(word);
-		stbuild.append(sep);	
+		stbuild.append(sep);
 	}
 	stbuild.append(word);
 	return stbuild.toString();
@@ -228,7 +165,7 @@ public String getSandwich(String str)
 	return "";
 }
 
-// Returns true if for every '*' (star) in the string, if there are chars both immediately before and after the star, they are the same. 
+// Returns true if for every '*' (star) in the string, if there are chars both immediately before and after the star, they are the same.
 public boolean sameStarChar(String str)
 {
 	int len = str.length() - 1;
@@ -238,12 +175,12 @@ public boolean sameStarChar(String str)
 		{
 			if(str.charAt(i-1) != str.charAt(i+1))
 				return false;
-		}	
+		}
 	}
 	return true;
 }
 
-// Look for patterns like "zip" and "zap" in the string -- length-3, starting with 'z' and ending with 'p'. Return a string where for all such words, the middle letter is gone, so "zipXzap" yields "zpXzp". 
+// Look for patterns like "zip" and "zap" in the string -- length-3, starting with 'z' and ending with 'p'. Return a string where for all such words, the middle letter is gone, so "zipXzap" yields "zpXzp".
 public String zipZap(String str)
 {
 	int len = str.length();
@@ -318,7 +255,7 @@ public String plusOut(String str, String word)
 	return stbuild.toString();
 }
 
-// Given a string and a non-empty word string, return a string made of each char just before and just after every appearance of the word in the string. Ignore cases where there is no char before or after the word, and a char may be included twice if it is between two words. 
+// Given a string and a non-empty word string, return a string made of each char just before and just after every appearance of the word in the string. Ignore cases where there is no char before or after the word, and a char may be included twice if it is between two words.
 public String wordEnds(String str, String word)
 {
 	int len = str.length();
@@ -333,7 +270,7 @@ public String wordEnds(String str, String word)
 			stbuild.append(str.charAt(pos-1));
 		if(i < len)
 			stbuild.append(str.charAt(pos+wLen));
-		pos = str.indexOf(word, i);	
+		pos = str.indexOf(word, i);
 	}
 	return stbuild.toString();
 }
